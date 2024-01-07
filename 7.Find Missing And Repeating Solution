@@ -1,0 +1,23 @@
+
+
+public class Solution {
+    public List<Integer> findTwoElement(List<Integer> arr, int n) {
+        int repNum = 0, missNum = 0;
+        Map<Integer, Integer> mp = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            mp.put(arr.get(i), mp.getOrDefault(arr.get(i), 0) + 1);
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if (mp.getOrDefault(i, 0) == 2) {
+                repNum = i;
+            }
+            if (!mp.containsKey(i)) {
+                missNum = i;
+            }
+        }
+
+        return Arrays.asList(repNum, missNum);
+    }
+}
