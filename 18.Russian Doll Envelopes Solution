@@ -1,0 +1,36 @@
+
+
+public class Solution {
+    public int maxEnvelopes(int[][] envelopes) {
+        Arrays.sort(envelopes, new Comparator<int[]>() {
+            public int compare(int[] a, int[] b) {
+                return a[0] == b[0] ? Integer.compare(b[1], a[1]) : Integer.compare(a[0], b[0]);
+            }
+        });
+
+        List<Integer> dp = new ArrayList<>();
+        for (int[] envelope : envelopes) {
+            int index = binarySearch(dp, envelope[1]);
+            if (index == dp.size()) {
+                dp.add(envelope[1]);
+            } else {
+                dp.set(index, envelope[1]);
+            }
+        }
+
+        return dp.size();
+    }
+
+    private int binarySearch(List<Integer> dp, int target) {
+        int left = 0, right = dp.size();
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (dp.get(mid) < target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+}
