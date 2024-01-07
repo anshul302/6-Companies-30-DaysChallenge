@@ -1,0 +1,50 @@
+class Solution {
+    class BST {
+        boolean isBST;
+        int max;
+        int min;
+        int sum;
+
+        BST(boolean isBST, int max, int min, int sum) {
+            this.isBST = isBST;
+            this.max = max;
+            this.min = min;
+            this.sum = sum;
+        }
+    }
+
+    int res = Integer.MIN_VALUE;
+
+    private BST findBST(TreeNode root) {
+        if (root == null) {
+            return new BST(true, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+        }
+
+        BST left = findBST(root.left);
+        BST right = findBST(root.right);
+
+        BST result = new BST(false, 0, 0, 0);
+
+        result.max = Math.max(root.val, Math.max(left.max, right.max));
+        result.min = Math.min(root.val, Math.min(left.min, right.min));
+
+        if (left.isBST && right.isBST && (left.max < root.val && right.min > root.val)) {
+            result.isBST = true;
+            result.sum = left.sum + right.sum + root.val;
+
+            result.min = Math.min(root.val, Math.min(left.min, right.min));
+            result.max = Math.max(root.val, Math.max(left.max, right.max));
+        } else {
+            result.sum = Math.max(left.sum, right.sum);
+        }
+
+        res = Math.max(res, result.sum);
+
+        return result;
+    }
+
+    public int maxSumBST(TreeNode root) {
+        findBST(root);
+        return res > 0 ? res : 0;
+    }
+}
