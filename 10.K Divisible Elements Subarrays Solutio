@@ -1,0 +1,32 @@
+
+
+public class Solution {
+    public int countDistinct(Vector<Integer> nums, int k, int p) {
+        Set<Vector<Integer>> set = new HashSet<>();
+
+        for (int i = 0; i < nums.size(); i++) {
+            int count = 0;
+            Vector<Integer> temp = new Vector<>();
+
+            for (int j = i; j < nums.size(); j++) {
+                if (count < k) {
+                    temp.add(nums.get(j));
+                    set.add(new Vector<>(temp));
+
+                    if (nums.get(j) % p == 0)
+                        count++;
+                } else if (count == k) {
+                    if (nums.get(j) % p != 0) {
+                        temp.add(nums.get(j));
+                        set.add(new Vector<>(temp));
+                    } else {
+                        break;
+                    }
+                }
+            }
+            temp.clear();
+        }
+
+        return set.size();
+    }
+}
