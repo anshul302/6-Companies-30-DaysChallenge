@@ -1,0 +1,42 @@
+
+
+public class Solution {
+    public List<Integer> smallestTrimmedNumbers(List<String> nums, List<List<Integer>> queries) {
+        int n = nums.size();
+        List<Integer> ans = new ArrayList<>();
+
+        for (List<Integer> query : queries) {
+            List<Pair<String, Integer>> v = new ArrayList<>();
+            int y = nums.get(0).length();
+
+            for (int i = 0; i < n; i++) {
+                String s = nums.get(i);
+                v.add(new Pair<>(s.substring(y - query.get(1)), i));
+            }
+
+            Collections.sort(v, Comparator.comparing(Pair::getKey));
+
+            ans.add(v.get(query.get(0) - 1).getValue());
+        }
+
+        return ans;
+    }
+
+    static class Pair<K, V> {
+        private final K key;
+        private final V value;
+
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+    }
+}
