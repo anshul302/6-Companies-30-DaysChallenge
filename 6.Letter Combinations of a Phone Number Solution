@@ -1,0 +1,33 @@
+
+
+public class Solution {
+    private void helper(int idx, int n, String digits, String[] dict, List<String> ans, StringBuilder temp) {
+        if (idx == n) {
+            ans.add(temp.toString());
+            return;
+        }
+
+        String val = dict[digits.charAt(idx) - '0'];
+        for (int i = 0; i < val.length(); i++) {
+            temp.append(val.charAt(i));
+            helper(idx + 1, n, digits, dict, ans, temp);
+            temp.deleteCharAt(temp.length() - 1); // backtrack
+        }
+    }
+
+    public List<String> letterCombinations(String digits) {
+        List<String> ans = new ArrayList<>();
+        int n = digits.length();
+        String[] dict = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        if (n == 0) return ans;
+        helper(0, n, digits, dict, ans, new StringBuilder());
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        String digits = "23";
+        List<String> result = solution.letterCombinations(digits);
+        System.out.println(result);
+    }
+}
