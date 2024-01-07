@@ -1,0 +1,23 @@
+public class Solution {
+    public String encode(String src) {
+        StringBuilder ans = new StringBuilder();
+        
+        for (int i = 0; i < src.length(); ) {
+            int j = i;
+            char ch = src.charAt(i);
+            
+            while (i < src.length() && src.charAt(j) == src.charAt(i)) {
+                i++;
+            }
+            
+            String a = Integer.toString(i - j);
+            ans.append(ch);
+            
+            for (char it : a.toCharArray()) {
+                ans.append(it);
+            }
+        }  
+    
+        return ans.toString();
+    }
+}
