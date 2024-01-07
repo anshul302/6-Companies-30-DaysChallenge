@@ -1,0 +1,33 @@
+
+
+class DataStream {
+    private List<Integer> v;
+    private int k;
+    private int val;
+    private int count;
+
+    public DataStream(int value, int k) {
+        this.k = k;
+        this.val = value;
+        this.v = new ArrayList<>();
+        this.count = 0;
+    }
+
+    public boolean consec(int num) {
+        v.add(num);
+
+        if (num == val) {
+            count++;
+        } else {
+            count = 0;
+        }
+
+        if (v.size() < k) {
+            return false;
+        } else if (count >= k) {
+            return true;
+        }
+
+        return false;
+    }
+}
