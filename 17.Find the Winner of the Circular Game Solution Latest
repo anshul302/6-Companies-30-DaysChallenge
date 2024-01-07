@@ -1,0 +1,22 @@
+
+
+public class Solution {
+    public int findTheWinner(int n, int k) {
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 1; i <= n; i++) {
+            q.offer(i);
+        }
+
+        while (q.size() != 1) {
+            int i = 1;
+            while (i < k) {
+                int f = q.poll();
+                q.offer(f);
+                i++;
+            }
+            q.poll();
+        }
+
+        return q.poll();
+    }
+}
