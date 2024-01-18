@@ -1,0 +1,29 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int numFriendRequests(int[] ages) {
+        int ans = 0;
+        Arrays.sort(ages);
+
+        Map<Integer, Integer> mp = new HashMap<>();
+        for (int i = 0; i < ages.length; i++) {
+            if (!mp.containsKey(ages[i])) {
+                mp.put(ages[i], i);
+            }
+        }
+
+        for (int i = 0; i < ages.length; i++) {
+            int x = Arrays.binarySearch(ages, 2 * (ages[i] - 7));
+            if (x < 0) {
+                x = -x - 1;
+            }
+            if (x <= i) {
+                continue;
+            }
+            ans += x - mp.get(ages[i]) - 1;
+        }
+        return ans;
+    }
+}
