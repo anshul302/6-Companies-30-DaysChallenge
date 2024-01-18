@@ -1,0 +1,41 @@
+class Solution {
+    private boolean isPalindrome(int x, String s) {
+        int l = 0, r = s.length() - 1;
+
+        while (l < r) {
+            if ((1 << l & x) == 0)
+                l++;
+
+            if ((1 << r & x) == 0)
+                r--;
+
+            if (l < r && (1 << l & x) != 0 && (1 << r & x) != 0) {
+                if (s.charAt(l) != s.charAt(r))
+                    return false;
+
+                l++;
+                r--;
+            }
+        }
+
+        return true;
+    }
+
+    public int maxProduct(String s) {
+        int ans = 1;
+
+        for (int a = 1; a < (1 << s.length()); a++) {
+            if (!isPalindrome(a, s))
+                continue; // check a is palindrome
+
+            for (int b = 1; b < (1 << s.length()); b++) {
+                if ((a & b) != 0 || !isPalindrome(b, s))
+                    continue; // not disjoint, not palindrome
+
+                ans = Math.max(ans, Integer.bitCount(a) * Integer.bitCount(b));
+            }
+        }
+
+        return ans;
+    }
+}
