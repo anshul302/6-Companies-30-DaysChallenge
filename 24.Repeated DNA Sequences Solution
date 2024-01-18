@@ -1,0 +1,31 @@
+
+
+class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        List<String> result = new ArrayList<>();
+        String st = "";
+        if (s.length() < 10) {
+            return result;
+        }
+
+        Map<String, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < 10 && i < s.length(); i++) {
+            st += s.charAt(i);
+        }
+        map.put(st, map.getOrDefault(st, 0) + 1);
+
+        for (int i = 10; i < s.length(); i++) {
+            st = st.substring(1) + s.charAt(i);
+            map.put(st, map.getOrDefault(st, 0) + 1);
+        }
+
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > 1) {
+                result.add(entry.getKey());
+            }
+        }
+
+        return result;
+    }
+}
