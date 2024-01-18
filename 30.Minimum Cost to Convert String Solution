@@ -1,0 +1,81 @@
+import java.util.*;
+
+class Solution {
+    public long minimumCost(String source, String target, List<Character> O, List<Character> C, List<Integer> cost) {
+        List<List<int[]>> adj = new ArrayList<>(26);
+
+        for (int i = 0; i < 26; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < O.size(); i++) {
+            adj.get(O.get(i) - 'a').add(new int[]{C.get(i) - 'a', cost.get(i)});
+        }
+
+        int[][] memo = new int[26][26];
+
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+
+        BiFunction<Integer, Integer, Integer> dijkstra = (s, e) -> {
+            if (memo[s][e] != -1) {
+                return memo[s][e];
+            }
+
+            int n = adj.size();
+            int[] dist = new int[n];
+            Arrays.fill(dist, Integer.MAX_VALUE);
+            dist[s] = 0;
+
+            PriorityQueue<int[]> minq = new PriorityQueue<>(Comparator.comparingInt(p -> p[0]));
+            minq.add(new int[]{0, s});
+
+            int u, v, w;
+            while (!minq.isEmpty()) {
+                int[] p = minq.poll();
+                u = p[1];
+
+                if (dist[u] < p[0]) {
+                    continue;
+                }
+
+                if (u == e) {
+                    return memo[s][e] = p[0];
+                }
+
+                for (int[] node : adj.get(u)) {
+                    v = node[0];
+                    w = node[1];
+                    if (dist[v] > dist[u] + w) {
+                        dist[v] = dist[u] + w;
+                        minq.add(new int[]{dist[v], v});
+                    }
+                }
+            }
+            return memo[s][e] = (dist[e] == Integer.MAX_VALUE ? -2 : dist[e]);
+        };
+
+        long res = 0;
+        for (int i = 0; i < source.length(); i++) {
+            if (source.charAt(i) != target.charAt(i)) {
+                int c = dijkstra.apply(source.charAt(i) - 'a', target.charAt(i) - 'a');
+                if (c < 0) {
+                    return -1;
+                }
+                res += c;
+            }
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        String source = "abc";
+        String target = "xyz";
+        List<Character> O = List.of('a', 'b', 'c');
+        List<Character> C = List.of('x', 'y', 'z');
+        List<Integer> cost = List.of(1, 2, 3);
+        System.out.println(solution.minimumCost(source, target, O, C, cost));
+    }
+}
