@@ -1,0 +1,28 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+class Solution {
+    List<String> charary = new ArrayList<>();
+
+    public boolean isValidSerialization(String preorder) {
+        split(preorder);
+        int diff = 1;
+        for (String pre : charary) {
+            if (--diff < 0) {
+                return false;
+            }
+            if (!pre.equals("#")) {
+                diff += 2;
+            }
+        }
+        return diff == 0;
+    }
+
+    void split(String s) {
+        StringTokenizer st = new StringTokenizer(s, ",");
+        while (st.hasMoreTokens()) {
+            charary.add(st.nextToken());
+        }
+    }
+}
