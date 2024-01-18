@@ -1,0 +1,60 @@
+
+
+class Solution {
+    public int findTheCity(int n, int[][] edges, int th) {
+        List<List<int[]>> g = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            g.add(new ArrayList<>());
+        }
+
+        for (int[] edge : edges) {
+            g.get(edge[0]).add(new int[]{edge[1], edge[2]});
+            g.get(edge[1]).add(new int[]{edge[0], edge[2]});
+        }
+
+        int city = 0, temp = Integer.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            int cnt = 0;
+            int[] dis = bfs(i, g, n);
+
+            for (int distance : dis) {
+                if (distance <= th) {
+                    cnt++;
+                }
+            }
+
+            if (cnt - 1 <= temp) {
+                temp = cnt - 1;
+                city = i;
+            }
+        }
+
+        return city;
+    }
+
+    public int[] bfs(int i, List<List<int[]>> g, int n) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+
+        int[] dis = new int[n];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[i] = 0;
+        pq.offer(new int[]{0, i});
+
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int x = current[0];
+            int y = current[1];
+
+            for (int[] node : g.get(y)) {
+                if (x + node[1] < dis[node[0]]) {
+                    dis[node[0]] = x + node[1];
+                    pq.offer(new int[]{dis[node[0]], node[0]});
+                }
+            }
+        }
+
+        return dis;
+    }
+}
