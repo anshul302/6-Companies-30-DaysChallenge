@@ -1,0 +1,38 @@
+class Solution {
+    public boolean check(int[] pref, int cost, int mid) {
+        int l = 0, r = mid;
+        boolean flag = false;
+        while (r < pref.length) {
+            int sum = pref[r] - pref[l];
+            if (sum <= cost) {
+                flag = true;
+                break;
+            }
+            l++;
+            r++;
+        }
+        return flag;
+    }
+
+    public int equalSubstring(String s, String t, int cost) {
+        int n = s.length();
+        int[] pref = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            pref[i] = pref[i - 1] + Math.abs((s.charAt(i - 1) - 'a') - (t.charAt(i - 1) - 'a'));
+        }
+
+        int l = 0, h = s.length() + 1;
+        int ans = 0;
+        while (l <= h) {
+            int mid = l + (h - l) / 2;
+            if (check(pref, cost, mid)) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                h = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+}
