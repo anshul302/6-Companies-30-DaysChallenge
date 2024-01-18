@@ -1,0 +1,63 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    private int ans;
+
+    private boolean check(List<Integer> nds, List<List<Integer>> sp, int idx) {
+        int n = nds.size();
+        for (int i = 0; i < n; i++) {
+            if (nds.get(i) - sp.get(idx).get(i) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int directBuy(List<Integer> nds, List<Integer> pr) {
+        int n = nds.size(), total = 0;
+        for (int i = 0; i < n; i++) {
+            total += (nds.get(i) * pr.get(i));
+        }
+        return total;
+    }
+
+    private void solve(List<Integer> pr, List<List<Integer>> sp, List<Integer> nds, int idx, int n, int cost) {
+        if (cost > ans) {
+            return;
+        }
+
+        if (idx == sp.size()) {
+            cost += directBuy(nds, pr);
+            ans = Math.min(ans, cost);
+            return;
+        }
+
+        if (check(nds, sp, idx)) {
+            for (int i = 0; i < n; i++) {
+                nds.set(i, nds.get(i) - sp.get(idx).get(i));
+            }
+            solve(pr, sp, nds, idx, n, cost + sp.get(idx).get(n));
+            for (int i = 0; i < n; i++) {
+                nds.set(i, nds.get(i) + sp.get(idx).get(i));
+            }
+        }
+
+        solve(pr, sp, nds, idx + 1, n, cost);
+    }
+
+    public int shoppingOffers(List<Integer> pr, List<List<Integer>> sp, List<Integer> nds) {
+        int n = pr.size();
+        ans = directBuy(nds, pr);
+        solve(pr, sp, nds, 0, n, 0);
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        List<Integer> pr = List.of(2, 5);
+        List<List<Integer>> sp = List.of(List.of(3, 0, 5), List.of(1, 2, 10));
+        List<Integer> nds = List.of(3, 2);
+        System.out.println(solution.shoppingOffers(pr, sp, nds));
+    }
+}
